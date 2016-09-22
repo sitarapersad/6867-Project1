@@ -65,7 +65,22 @@ def approximateGradient(point, approx_fn, delta):
     return gradient 
 
 
-def stochasticGradientDescent():
+def stochasticGradientDescent(x, y, ):
     '''
-    Performs stochastic gradient descent 
+    Iplements stochastic gradient 
+
+    Stochastic update function: w(t+1) = w(t) - n grad_E(w(t)) [for some random data point]
+
+    !! QUESTIONS: Do we input an error function and compute the gradient from that
+    !! How do we compute it? aka no gradient_fn parameter needed?
+
+    @param: x - n x d numpy array of n d-dimensional data points
+    @param: y - n x 1 numpy array of n labels/points 
+    @param: objective_fn - 
+    @param: gradient_fn - 
+    @param: initial_guess (w(0)) - 
+    @param: step_size (n) - 
+    @param: convergence - threshold 
+
+    @return: best_guess
     '''
