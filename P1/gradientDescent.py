@@ -12,14 +12,18 @@ def getData():
     return (X,y) 
 
 
-'''
-Implements batch gradient descent 
+def gradientDescent(objective_fn, gradient_fn, initial_guess, step_size, convergence):
 
-@param: objective_fn - 
-@param: gradient_fn
-@param: initial guess - 
-@param: step size - 
-@param: convergence criterion - threshold 
+    '''
+    Implements batch gradient descent 
 
-@return 
-'''
+    @param: objective_fn - 
+    @param: gradient_fn
+    @param: initial_guess - 
+    @param: step_size - 
+    @param: convergence - threshold 
+
+    @return:  
+    '''
+
+
