@@ -1,5 +1,5 @@
 import pylab as pl
-import numpy
+import numpy as np
 import pandas 
 
 def getData():
@@ -13,39 +13,62 @@ def getData():
 
     return (X,y) 
 
+# define functions to test gradient descent on
 
-def gradientDescent(x, y, objective_fn, gradient_fn, initial_guess, step_size, convergence):
+def computeGaussian(x, mu, sigma):
+    '''
+    
+    '''
+    return 1.0/(2*pi) * np.exp(-np.power(x-mu, 2.)/(2*np.power(sigma,2.)))
+
+def differentiateGaussian(x, mu, sigma):
+
+    return None 
+
+def computeQuadBowl(x):
+
+    return None 
+
+def differentiateQuadBowl(x):
+
+    return None 
+
+
+# Implementation 
+def gradientDescent(objective_fn, gradient_fn, initial_guess, step_size, convergence):
 
     '''
     Implements batch gradient descent 
 
     Batch update function: w(t+1) = w(t) - n grad_E(w(t)) 
 
-    !! QUESTIONS: Do we input an error function and compute the gradient from that
-    !! How do we compute it? aka no gradient_fn parameter needed?
-
-    @param: x - n x d numpy array of n d-dimensional data points
-    @param: y - n x 1 numpy array of n labels/points 
-    @param: objective_fn - 
-    @param: gradient_fn - 
+    @param: objective_fn - loss function 
+    @param: gradient_fn - gradient of loss function; if not specified, compute numerical approx
     @param: initial_guess (w(0)) - 
     @param: step_size (n) - 
-    @param: convergence - threshold 
+    @param: convergence - if successive function values differ below this threshold, stop iterating 
 
     @return: best_guess
     '''
-
-    ## SKETCH OF ALGORITHM; WILL NOT ACTUALLY WORK LEL
     w = initial_guess
     converged = False
-    while not converged:
+    num_iters = 0
 
-        # perform batch gradient descent 
-        w_new -= step_size*gradient_fn(w)
-        if abs(w_new - w) < convergence:
+    while not converged: # perform batch gradient descent until convergence
+        num_iters += 1
+        if gradient_fn != None :
+            w_new -= step_size*np.array(gradient_fn(w))
+        else:
+            # if no gradient function specified, estimate gradient by finite differences method
+            ## TODO!
+            pass
+        if abs(objective_fn(w_new) - objective_fn(w)) < convergence: 
             converged = True
+        w = w_new
 
-    return best_guess
+    best_guess = w
+    best_value = objective_fn(w)
+    return best_guess, best_value
 
 def approximateGradient(point, approx_fn, delta):
     '''
@@ -61,7 +84,8 @@ def approximateGradient(point, approx_fn, delta):
     @return: gradient - float which is an approximation of the gradient at point
     '''
 
-
+    ## TODO: WHAT IS DELTA FOR A VECTOR X?
+    gradient = 1.0/delta * ( approx_fn(point+0.5*delta) - approx_fn(x-0.5*delta) ) 
     return gradient 
 
 
@@ -70,9 +94,6 @@ def stochasticGradientDescent(x, y, ):
     Iplements stochastic gradient 
 
     Stochastic update function: w(t+1) = w(t) - n grad_E(w(t)) [for some random data point]
-
-    !! QUESTIONS: Do we input an error function and compute the gradient from that
-    !! How do we compute it? aka no gradient_fn parameter needed?
 
     @param: x - n x d numpy array of n d-dimensional data points
     @param: y - n x 1 numpy array of n labels/points 
@@ -83,4 +104,9 @@ def stochasticGradientDescent(x, y, ):
     @param: convergence - threshold 
 
     @return: best_guess
+
+    This is the exact same procedure as batch gradient descent, except the gradient_fn is 
+    computed over one data point.
+
+    COPY PASTA TIME BOYZ
     '''

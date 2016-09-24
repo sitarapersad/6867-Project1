@@ -40,19 +40,60 @@ def computePolynomialWeight(X, Y, M):
 
     return np.dot(moore_penrose_inverse, Y)
 
-def computeSSE():
+def computeSSE(X, Y, M_list, w):
     '''
     Computes the sum of squares error (SSE) and derivative for a data
     set and a hypothesis, specified by the list of M polynomial basis 
     functions and a weight vector
 
+    Least squares error is given by J(x,y,w) = 1/2 sum_over_data (Y-w.T*phi(X_n))**2
+
     @param: X - n x 1 array of n 1-dimensional data points
     @param: Y - n x 1 array of corresponding y vals
-    @param: phi - ? x ? polynomial basis function vector
+    @param: M_list - ordered list of polynomial basis functions phi_M(x) = x^m
     @param: w - ? x ? array weight vector
 
-    @return: squared_error
-    @return: derivative 
+    @return: squared_error 
     '''
+    TODO: AUGMENT X WITH OFFSET??
 
-    return "NOT IMPLEMENTED"
+    n,d = X.shape
+    assert d == 1 #Data is real valued
+
+    #create phi function to compute phi's guess of Y
+    def phi(data):
+        return sum(f(data) for f in M_list)
+
+    sqrd_err = 0
+    for i in range(n):
+        sqrd_err += np.power(Y[i] - np.dot(w.T,phi(X[i])), 2.)
+    return 0.5*sqrd_err
+
+def computeSSE_prime(X, Y, M_list, w):
+    '''
+    Computes the sum of squares error (SSE) and derivative for a data
+    set and a hypothesis, specified by the list of M polynomial basis 
+    functions and a weight vector
+
+    Least squares error grad is given by J(x,y,w) = sum_over_data (y[i]-w.T*phi(x[i]))*phi(x[i])
+    see Eq'n 3.23 Bishop
+    
+    @param: X - n x 1 array of n 1-dimensional data points
+    @param: Y - n x 1 array of corresponding y vals
+    @param: M_list - ordered list of polynomial basis functions phi_M(x) = x^m
+    @param: w - ? x ? array weight vector
+
+    @return: derivative of squared error 
+    '''
+    n,d = X.shape
+    assert d == 1 #Data is real valued
+
+    #create phi function to compute phi's guess of Y
+    def phi(data):
+        return sum(f(data) for f in M_list)
+
+    sqrd_err = 0
+    for i in range(n):
+        sqrd_err += phi(x[i])* (y[i] - np.dot(w.T,phi(x[i])) )
+    return 0.5*sqrd_err
+
