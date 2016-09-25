@@ -33,7 +33,7 @@ def computePolynomialWeight(X, Y, M):
     @param: Y - n x 1 array of corresponding y vals
     @param: M - maximum order of polynomial basis
 
-    @return: ? x ? numpy array which is the MLE for the weight vector
+    @return:M x 1 numpy array which is the MLE for the weight vector
     '''
     #Variables here
     N = len(X) 
