@@ -17,21 +17,57 @@ def getData():
 
 def computeGaussian(x, mu, sigma):
     '''
+    Evaluaes the Gaussian at a given point, given by:
+    f(x) = = −1/sqrt(2π)^n|Σ|exp[ -1/2(x-u).T Σ^-1 (x-u) ]
     
+    @param: x
+    @param: mu
+    @param: sigma
+    
+    @return: result- scalar which is the result of evaulating the function
     '''
     return 1.0/(2*pi) * np.exp(-np.power(x-mu, 2.)/(2*np.power(sigma,2.)))
 
 def differentiateGaussian(x, mu, sigma):
+    '''
+    Computes the derivative of the Gaussian, given by:
+    ∂f(x)/∂x = −f(x)Σ(−1)(x − u).
+    
+    @param: x
+    @param: mu
+    @param: sigma
+    
+    @return
+    '''
+    
+    return computeGaussian*(
 
+def computeQuadBowl(x,A,b):
+    '''
+    Evaluates the quadratic bowl at a point, given by:
+    f(x) = 1/2 x^TAx - x^Tb
+    
+    @param: x - n x d array of input data
+    @param: A - 
+    @param: b - 
+    
+    @output: result - a scalar which is the result of the function evaluation
+    '''
+    
     return None 
 
-def computeQuadBowl(x):
-
-    return None 
-
-def differentiateQuadBowl(x):
-
-    return None 
+def differentiateQuadBowl(x,A,b):
+    '''
+    Evaluates the derivative of thequadratic bowl at a point, given by:
+    f(x) = Ax-b
+    
+    @param: x -
+    @param: A - 
+    @param: b - 
+    
+    @output: result - a vector with the dimensions of x which is the result of the function evaluation
+    '''
+    return np.dot(A,x) - b
 
 
 # Implementation 
@@ -53,6 +89,9 @@ def gradientDescent(objective_fn, gradient_fn, initial_guess, step_size, converg
     w = initial_guess
     converged = False
     num_iters = 0
+        
+    guess_evolution = []
+    fxn_evolution = []
 
     while not converged: # perform batch gradient descent until convergence
         num_iters += 1
@@ -64,11 +103,17 @@ def gradientDescent(objective_fn, gradient_fn, initial_guess, step_size, converg
             pass
         if abs(objective_fn(w_new) - objective_fn(w)) < convergence: 
             converged = True
+        
+        # keep track of how the guess and function change as we run gradient descent  
+        guess_evolution.append(w)
+        fxn_evolution.append(objective_fn(w))
         w = w_new
-
+    
+        guess_evolution.append(w)
+    fxn_evolution.append(objective_fn(w))
     best_guess = w
     best_value = objective_fn(w)
-    return best_guess, best_value
+    return best_guess, best_value, guess_evolution, fxn_evolution
 
 def approximateGradient(point, approx_fn, delta):
     '''
