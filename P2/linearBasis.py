@@ -36,13 +36,15 @@ def computePolynomialWeight(X, Y, M):
     @return:M x 1 numpy array which is the MLE for the weight vector
     '''
     #Variables here
-    N = len(X) 
+    N,d = X.shape
+    assert d == 1 #Data is real valued 
+
     #Generate floating-point zero matrix of size NxM to populate with phi_polynomial function
     design_matrix = numpy.zeros((N, M+1))
 
     #Populate Matrix
-    for i in range(len(x)):
-        for j in range(M):
+    for i in range(N):
+        for j in range(M+1):
             design_matrix[i, j] = phi_polynomial(X[i], j)
     
     #Calculate Max-Likelihood Weight Vector
@@ -86,7 +88,7 @@ def computeSSE(X, Y, M_list, w):
         return sum(f(x) for f in M_list)
 
     sqrd_err = 0
-    for i in range(1, n+1):
+    for i in range(n):
         sqrd_err += np.power(Y[i] - np.dot(w.T,phi(X[i])), 2.)
     
     return 0.5*sqrd_err
