@@ -45,7 +45,7 @@ def ridge_regression(X, Y, L, M):
     @return: Full Error
     '''
 
-    #Step 1: calculate w. (using Bishop 3.28)
+    #STEP 1: calculate w. (using Bishop 3.28)
   
     #Variables here
     N,d = X.shape
@@ -65,13 +65,13 @@ def ridge_regression(X, Y, L, M):
     w = np.dot(np.linalg.inv(np.dot(L, I) + np.dot(phi_matrix.T, phi_matrix)), np.dot(phi_matrix.T, Y))
     
     E_d = 0
-    #STEP 2: Calculate E_d (sum of squares from 1 -> N)
+    #STEP 2: Calculate E_d
     for i in range(N):
         E_d += 0.5 * np.power(Y[i] - np.dot(w.T, [np.power(X[i],j) for j in range(M+1)]), 2.)
     
-    #STEP 3: Calculate L*E_w
+    #STEP 3: Calculate 0.5L*E_w
     E_w = 0.5 * L * np.dot(w.T, w)
 
-    #STEP 4: Return E_d + L*E_w
+    #STEP 4: Return E_d + 0.5L*E_w
 
     return E_d + E_w
