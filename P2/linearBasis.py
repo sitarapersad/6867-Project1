@@ -2,6 +2,9 @@ import matplotlib.pyplot as plt
 import pylab as pl
 import numpy as np 
 
+
+# TODO: Check for off-by-one errors, make sure dimensions match.
+
 def getData(ifPlotData=True):
     # load the fitting data and (optionally) plot out for examination
     # return the X and Y as a tuple
@@ -58,7 +61,7 @@ def computePolynomialWeight(X, Y, M):
 
     #moore-penrose inverse = (phi.T x phi)^-1 x phi.T 
     moore_penrose_inverse = np.dot(np.linalg.inv(np.dot(design_matrix.T,design_matrix)), design_matrix.T)
-    assert moore_penrose_inverse.shape = (M, 1)
+    assert moore_penrose_inverse.shape = (M + 1, 1)
 
     return np.dot(moore_penrose_inverse, Y)
 
@@ -144,13 +147,13 @@ def computeCosWeight(X, Y, M = 8):
 
     #Populate Matrix
     for i in range(len(x)):
-        for j in range(M):
+        for j in range(M+1):
             design_matrix[i, j] = phi_cos(X[i], j)
     
     #Calculate Max-Likelihood Weight Vector
     #moore-penrose inverse = (phi.T x phi)^-1 x phi.T 
     moore_penrose_inverse = np.dot(np.linalg.inv(np.dot(design_matrix.T,design_matrix)), design_matrix.T)
-    assert moore_penrose_inverse.shape = (M, 1)
+    assert moore_penrose_inverse.shape = (M+1, 1)
 
     return np.dot(moore_penrose_inverse, Y)
 
