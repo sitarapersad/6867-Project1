@@ -101,12 +101,12 @@ def differentiateSquaredLoss(X,Y,theta):
     
     @output: gradient - vector which is the squared error derivative wrt theta 
     '''
-    gradient = np.zeros(theta.shape)
-    for i in range(len(X)):
-        x = X[i]
-        y = Y[i]
-        gradient += x* (theta.T*x - y)
-    return gradient
+        gradient = np.zeros(theta.shape)
+        for i in range(len(X)):
+            x = X[i]
+            y = Y[i]
+            gradient += x* (theta.T*x - y)
+        return gradient
 
 
 # Implementation 
@@ -262,20 +262,4 @@ def stochasticGradientDescent(x, y, objective_fn, gradient_fn, initial_guess, st
     best_value = objective_fn(w)
     
     return best_guess, best_value, guess_evolution, fxn_evolution, norm_evolution
-# Load parameters
-gaussMean,gaussCov,quadBowlA,quadBowlb = params.getData()
 
-# Test implementation of gradient descent on Gaussian
-
-objective_fn = lambda x : gd.computeGaussian(x, gaussMean, gaussCov)
-gradient_fn = lambda x: gd.differentiateGaussian(x, gaussMean, gaussCov)
-#
-print gaussMean, gaussCov
-                                                                                         
-best_guess, best_value, guess_evolution, fxn_evolution, norm_evolution = gd.gradientDescent(objective_fn,
-                                                                                            gradient_fn,
-                                                                                            initial_guess= [np.random.randint(0,100),np.random.randint(0,100)], 
-                                                                                            step_size=10000,
-                                                                                            convergence = 1e-10)
-
-print 'Gaussian converged to: 'best_value, best_guess
