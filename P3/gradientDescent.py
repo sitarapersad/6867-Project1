@@ -1,8 +1,6 @@
 import pylab as pl
 import numpy as np
-#import gradientDescent as gd
-import loadParametersP1 as params
-import loadFittingDataP1 as fitData
+
 
 def getData():
     
@@ -285,43 +283,3 @@ def stochasticGradientDescent(x, y, objective_fn, gradient_fn, initial_guess, st
     
     return best_guess, best_value, guess_evolution, fxn_evolution, norm_evolution
 
-# Run batch gradient descent with a squared error objective function
-
-#Load data set
-X, Y = fitData.getData()
-
-initial_guess=np.zeros(len(X[0]))
-initial_guess.fill(np.random.random())
-print initial_guess
-objective_fn = lambda theta : computeSquaredLoss(X, Y, theta)
-gradient_fn = lambda theta: differentiateSquaredLoss(X,Y,theta)
-                                                                                        
-best_guess, best_value, guess, fxn, grad_norm = gradientDescent(objective_fn,
-                                                              gradient_fn,
-                                                              initial_guess= initial_guess, 
-                                                              step_size=1e-5,
-                                                              convergence = 1e-10)
-
-num_iters = len(grad_norm)
-print 'Least squares converged to: ', best_guess, 'with', best_value, ' in ', num_iters, ' iterations'
-
-# Run stochastic gradient descent on the given dataset then compare it with the previous batch gradient descent
-best_guess2, best_value, guess, fxn, grad_norm = stochasticGradientDescent(x = X,
-                                                                     y = Y, 
-                                                                     objective_fn = objective_fn,
-                                                                     gradient_fn = gradient_fn,
-                                                                     initial_guess= initial_guess, 
-                                                                     step_size=1e5,
-                                                                     convergence = 1e-10)
-
-num_iters = len(grad_norm)
-print 'Stochastic gradient descent converged to ',  best_guess2, 'with', best_value, ' in ', num_iters, ' iterations'
-
-print np.linalg.norm(best_guess-best_guess2)/np.linalg.norm(best_guess)
-# Plot how the norm changes over time 
-pl.plot(range(num_iters), grad_norm)
-pl.show()
-
-# Plot how the function value changes over time
-pl.plot(range(num_iters), fxn)
-pl.show()

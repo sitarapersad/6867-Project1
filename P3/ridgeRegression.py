@@ -1,6 +1,7 @@
 import pdb
 import random
 import pylab as pl
+import numpy as np
 
 # X is an array of N data points (one dimensional for now), that is, NX1
 # Y is a Nx1 column vector of data values
@@ -42,6 +43,7 @@ def ridge_regression(X, Y, L, M):
     @param: L - regularization coefficient
     @param: M - maximum order of polynomial basis
     
+    @return: w - error minimizing weight vector
     @return: Full Error
     '''
 
@@ -54,7 +56,7 @@ def ridge_regression(X, Y, L, M):
     I = np.identity(M+1)
      
     #Generate floating-point zero matrix of size N x (M+1) to populate with phi_polynomial function
-    phi_matrix = numpy.zeros((N, M+1))
+    phi_matrix = np.zeros((N, M+1))
 
     #Populate Matrix
     for i in range(N):
@@ -62,7 +64,7 @@ def ridge_regression(X, Y, L, M):
             phi_matrix[i, j] = phi_polynomial(X[i], j)
     
     #calculate w: np.dot(np.linalg.inv(np.dot(design_matrix.T,design_matrix)), design_matrix.T)
-    w = np.dot(np.linalg.inv(np.dot(L, I) + np.dot(phi_matrix.T, phi_matrix)), np.dot(phi_matrix.T, Y))
+    w = np.dot(np.linalg.inv(L*I + np.dot(phi_matrix.T, phi_matrix)), np.dot(phi_matrix.T, Y))
     
     E_d = 0
     #STEP 2: Calculate E_d
@@ -74,4 +76,15 @@ def ridge_regression(X, Y, L, M):
 
     #STEP 4: Return E_d + 0.5L*E_w
 
-    return E_d + E_w
+    return w, E_d + E_w
+    
+# Load data 
+X, Y = getData('curvefittingp2.txt')
+
+print X
+
+L = 0.5
+M = 1
+w, error = ridge_regression(X, Y, L, M)
+
+print w[0][0], error, w
