@@ -27,8 +27,11 @@ def computeGaussian(x, mu, sigma):
     
     @return: result- scalar which is the result of evaluating the function
     '''
-    x = np.array(x)
-    d = float(x.shape[0])
+    if isinstance(x, float):
+        d = 1
+    else:
+        x = np.array(x)
+        d = float(x.shape[0])
     mu = np.array(mu)
     sigma = np.array(sigma)
        
@@ -61,8 +64,6 @@ def computeQuadBowl(x,A,b):
     
     @output: result - a vector with the dimensions of x which is the result of the function evaluation
     '''
-    print 'params', x,'\n', A,'\n', b
-    print 'result', np.dot(x,(1/2*np.dot(A,x)-b))
     return np.dot(x,(1/2*np.dot(A,x)-b))
     
 def differentiateQuadBowl(x,A,b):
@@ -149,7 +150,6 @@ def gradientDescent(objective_fn, gradient_fn, initial_guess, step_size, converg
             # if no gradient function specified, estimate gradient by finite differences method
             w_new = w - step_size*np.array(approximateGradient(w, objective_fn, 0.00001))
             norm_evolution.append(np.linalg.norm(approximateGradient(w,objective_fn, 0.00001)))
-        print 'obective_fn', objective_fn(w_new)   
         if abs(objective_fn(w_new) - objective_fn(w)) < convergence: 
             converged = True
         
@@ -188,10 +188,15 @@ def approximateGradient(point, approx_fn, delta):
 #        gradient[i] = approx_fn(point[i]+0.5*delta) - approx_fn(point[i]-0.5*delta) 
     # convert delta scalar to delta vector
     delta_val = delta
-    delta = np.zeros(point.shape)
+    if isinstance(point, float):
+        delta = np.zeros(1)
+        gradient = np.zeros(1)
+    else:
+        delta = np.zeros(point.shape)
+        gradient = np.zeros(point.shape)
     delta.fill(delta_val)
     
-    gradient = np.zeros(point.shape)
+    
     gradient.fill(approx_fn(point+0.5*delta) - approx_fn(point-0.5*delta) ) 
 
     return 1./delta_val*gradient 
@@ -238,11 +243,9 @@ def stochasticGradientDescent(x, y, objective_fn, gradient_fn, initial_guess, st
         grad_step = differentiateSquaredLoss(X[random_index],Y[random_index],w)
         w_new = w - step_size*grad_step
         norm_evolution.append(np.linalg.norm(grad_step))
-        
-        print 'function value', objective_fn(w_new)
-       # if abs(objective_fn(w_new) - objective_fn(w)) < convergence: 
-        if True:
-           converged = True
+
+        if abs(objective_fn(w_new) - objective_fn(w)) < convergence: 
+            converged = True
         
         # keep track of how the guess and function change as we run gradient descent  
         guess_evolution.append(w)
@@ -262,3 +265,4 @@ def stochasticGradientDescent(x, y, objective_fn, gradient_fn, initial_guess, st
     best_value = objective_fn(w)
     
     return best_guess, best_value, guess_evolution, fxn_evolution, norm_evolution
+
